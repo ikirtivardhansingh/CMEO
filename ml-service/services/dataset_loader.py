@@ -8,7 +8,7 @@ class DatasetLoader:
     
 loader = DatasetLoader()
 
-df = loader.load("datasets/WA_Fn-UseC_-Telco-Customer-Churn.csv")
+df = loader.load("datasets/tcc.csv")
 
 print(df.head())
 print(df.columns)
