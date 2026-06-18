@@ -37,6 +37,7 @@ class Preprocessor:
         df[numerical_columns] = scaler.fit_transform(
             df[numerical_columns]
         )
+       
         return df
     def split_data(
             self,
@@ -67,6 +68,7 @@ class Preprocessor:
             categorical_columns,
             numerical_columns
     ):
+        
         df = df.drop(columns = drop_columns)
         df = self.encode_binary_columns(
             df,
@@ -78,16 +80,17 @@ class Preprocessor:
             categorical_columns
         )
 
-        df = self.scale_numerical_columns(
-            df, 
-            numerical_columns
-        )
 
         df = self.encode_categorical_columns(
             df,
             categorical_columns
         )
         df = self.handle_missing_values(df)
+        df = self.scale_numerical_columns(
+            df, 
+            numerical_columns
+        )
+    
         x = df.drop(columns=[target_column])
 
         y = df[target_column]
