@@ -1,0 +1,35 @@
+{
+  "target_column": "Churn",
+
+  "drop_columns": [
+    "customerID",
+    "gender"
+  ],
+
+  "selected_features": [
+    "tenure",
+    "MonthlyCharges",
+    "TotalCharges",
+    "SeniorCitizen",
+    "Partner",
+    "Dependents",
+    "PaperlessBilling",
+    "Contract"
+  ],
+
+  "binary_columns": [
+    "Partner",
+    "Dependents",
+    "PaperlessBilling"
+  ],
+
+  "categorical_columns": [
+    "Contract"
+  ],
+
+  "numerical_columns": [
+    "tenure",
+    "MonthlyCharges",
+    "TotalCharges"
+  ]
+}

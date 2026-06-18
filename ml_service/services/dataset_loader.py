@@ -1,10 +1,15 @@
 import pandas as pd
+import json
 from ml_service.services.validator import Validator
 from ml_service.preprocessors.preprocessor import Preprocessor
+from ml_service.models.logistic_regression import LogisticRegressionModel
+
 class DatasetLoader:
 
     def load(self, file_path):
         return pd.read_csv(file_path)
+with open("configs/churn_config.json", "r") as file:
+    config = json.load(file)
     
 loader = DatasetLoader()
 
@@ -17,14 +22,12 @@ validator = Validator()
 validator.validate_not_empty(df)
 validator.validate_target_column(
     df,
-    "Churn"
+    config["target_column"]
 )
 validator.validate_required_columns(
     df,
-    [
-        "tenure",
-        "MonthlyCharges",
-        "Contract"
+    config[
+        "validation_req_columns"
     ]
 )
 
@@ -35,21 +38,26 @@ preprocessor = Preprocessor()
 
 processed_data = preprocessor.process(
     df,
-    target_column="Churn",
-    drop_columns=["customerID"],
-    binary_columns=[
-        "Partner",
-        "Dependents",
-        "PaperlessBilling"
+    selected_features=config["selected_features"],
+    target_column=config["target_column"],
+    drop_columns=config["drop_columns"],
+    binary_columns=config[
+        "binary_columns"
     ],
-    categorical_columns=[
-        "Contract"
+    categorical_columns=config[
+        "categorical_columns"
     ],
-    numerical_columns=[
-        "tenure",
-        "MonthlyCharges",
-        "TotalCharges"
-    ]
+    numerical_columns=config["numerical_columns"]
+)
+print(processed_data["X_train"].columns)
+model = LogisticRegressionModel()
+
+model.train(processed_data["X_train"],
+            processed_data["y_train"]
 )
 
-print(processed_data.keys())
+evaluation_result = model.evaluate(processed_data["X_test"],
+                processed_data["y_test"]
+)
+
+print("Accuracy:", evaluation_result)

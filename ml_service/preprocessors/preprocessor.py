@@ -66,7 +66,8 @@ class Preprocessor:
             drop_columns,
             binary_columns,
             categorical_columns,
-            numerical_columns
+            numerical_columns,
+            selected_features
     ):
         
         df = df.drop(columns = drop_columns)
@@ -90,9 +91,10 @@ class Preprocessor:
             df, 
             numerical_columns
         )
+        df = df[selected_features + [target_column]]
     
         x = df.drop(columns=[target_column])
-
+        print(x.columns)
         y = df[target_column]
 
         (
