@@ -1,6 +1,6 @@
 from .base_model import BaseModel
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
+
 
 class LogisticRegressionModel(BaseModel):
 
@@ -15,8 +15,5 @@ class LogisticRegressionModel(BaseModel):
         result = self.model.predict(X)
         return result
 
-    def evaluate(self, x_test, y_test):
-        predictions = self.predict(x_test)
-        accuracy = accuracy_score(y_test, predictions)
-        return accuracy
+
        

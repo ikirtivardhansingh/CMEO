@@ -3,7 +3,7 @@ import json
 from ml_service.services.validator import Validator
 from ml_service.preprocessors.preprocessor import Preprocessor
 from ml_service.models.logistic_regression import LogisticRegressionModel
-
+from ml_service.evaluators.evaluator import Evaluator
 class DatasetLoader:
 
     def load(self, file_path):
@@ -56,8 +56,13 @@ model.train(processed_data["X_train"],
             processed_data["y_train"]
 )
 
-evaluation_result = model.evaluate(processed_data["X_test"],
-                processed_data["y_test"]
+evaluator = Evaluator()
+predictions = model.predict(
+    processed_data["X_test"]
 )
 
+evaluation_result = evaluator.evaluate(
+    processed_data["y_test"],
+    predictions
+)
 print("Accuracy:", evaluation_result)
