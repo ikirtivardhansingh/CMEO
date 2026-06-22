@@ -4,6 +4,8 @@ from ml_service.services.validator import Validator
 from ml_service.preprocessors.preprocessor import Preprocessor
 from ml_service.models.logistic_regression import LogisticRegressionModel
 from ml_service.evaluators.evaluator import Evaluator
+from ml_service.model_registry import registry
+
 class DatasetLoader:
 
     def load(self, file_path):
@@ -55,6 +57,11 @@ model = LogisticRegressionModel()
 model.train(processed_data["X_train"],
             processed_data["y_train"]
 )
+
+import joblib
+joblib.dump(model, "RegressionModel.pkl")
+
+registry.save_model(model)
 
 evaluator = Evaluator()
 predictions = model.predict(
