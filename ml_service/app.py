@@ -7,16 +7,22 @@ model = None
 def home():
     return "CMEO API running"
 
-def load_model():
+def load_model(model_name):
     global model
-    model = joblib.load("trained_models/RegressionModel.pkl")
+    model = joblib.load(f"trained_models/{model_name}.pkl")
 
 
 @app.route("/predict", methods=[ "POST"])
 def predict():
 
     data = request.get_json()
+
+    model_name = data.get("model")
+
+    load_model(model_name)
+    print(model_name)
     print(data)
+
     if data is None: 
         return jsonify({'Error': "invalid or missing json body"}), 400
     feature = data.get('features')
@@ -34,6 +40,5 @@ def predict():
 
 
 if __name__ == "__main__":
-    load_model()
     app.run(debug=True)
 
