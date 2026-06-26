@@ -9,5 +9,5 @@ class DecisionTreeModel(BaseModel):
         self.model.fit(x, y)
 
     def predict(self, X):
-        result = self.modelpredict(X)
+        result = self.model.predict(X)
         return result

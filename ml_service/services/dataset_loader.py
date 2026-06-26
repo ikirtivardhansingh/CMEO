@@ -1,8 +1,12 @@
 import pandas as pd
 import json
+
+import joblib  
 from ml_service.services.validator import Validator
 from ml_service.preprocessors.preprocessor import Preprocessor
 from ml_service.models.logistic_regression import LogisticRegressionModel
+from ml_service.models.decision_tree import DecisionTreeModel
+from ml_service.models.random_forest import RandomForestClassificationModel
 from ml_service.evaluators.evaluator import Evaluator
 from ml_service.model_registry import registry
 
@@ -57,28 +61,30 @@ print(processed_data["X_train"].columns)
 #Preposessing ends here------------------
 #Model training Starts here --------------------
 
-model = LogisticRegressionModel()
-model.train(processed_data["X_train"],
-            processed_data["y_train"]
-)
-
-#Model(logistic reg) training completed-----------
-
-#saving model to pkl for inference------------------------
-import joblib   
-joblib.dump(model, "RegressionModel.pkl")
-registry.save_model(model)
-#-----------------------------------------------
-
-
-#Evaluator startsa here -------------------------
+models = [ 
+            LogisticRegressionModel(),
+            DecisionTreeModel(),
+            RandomForestClassificationModel()
+        ]
 evaluator = Evaluator()
-predictions = model.predict(
-    processed_data["X_test"]
-)
 
-evaluation_result = evaluator.evaluate(
-    processed_data["y_test"],
-    predictions
-)
-print("Accuracy:", evaluation_result)
+for model in models:
+    print(f"Training {model.__class__.__name__}")
+    model.train(processed_data["X_train"],
+                processed_data["y_train"]
+                )
+    
+    predictions = model.predict(
+                    processed_data["X_test"]
+                    )
+    
+    evaluation_result = evaluator.evaluate(
+                        processed_data["y_test"],
+                        predictions
+                    )
+    print("Accuracy:", evaluation_result)
+    joblib.dump(model, f"trained_models/{model.__class__.__name__}.pkl")
+    registry.save_model(model)
+ 
+
+

@@ -7,7 +7,7 @@ class RandomForestClassificationModel(BaseModel):
         self.model = RandomForestClassifier()
 
     def train(self, x, y):
-        self.model.fir(x, y)
+        self.model.fit(x, y)
 
     def predict(self, X):
         result = self.model.predict(X)
