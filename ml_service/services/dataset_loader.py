@@ -10,6 +10,7 @@ class DatasetLoader:
 
     def load(self, file_path):
         return pd.read_csv(file_path)
+    
 with open("configs/churn_config.json", "r") as file:
     config = json.load(file)
     
@@ -17,8 +18,8 @@ loader = DatasetLoader()
 
 df = loader.load("datasets/tcc.csv")
 
-print(df.head())
-print(df.columns)
+# print(df.head())
+# print(df.columns)
 
 validator = Validator()
 validator.validate_not_empty(df)
@@ -35,7 +36,7 @@ validator.validate_required_columns(
 
 print("All validations passed")
 
-
+# PreProcessing starts here -----------------------------
 preprocessor = Preprocessor()
 
 processed_data = preprocessor.process(
@@ -52,17 +53,25 @@ processed_data = preprocessor.process(
     numerical_columns=config["numerical_columns"]
 )
 print(processed_data["X_train"].columns)
-model = LogisticRegressionModel()
 
+#Preposessing ends here------------------
+#Model training Starts here --------------------
+
+model = LogisticRegressionModel()
 model.train(processed_data["X_train"],
             processed_data["y_train"]
 )
 
-import joblib
+#Model(logistic reg) training completed-----------
+
+#saving model to pkl for inference------------------------
+import joblib   
 joblib.dump(model, "RegressionModel.pkl")
-
 registry.save_model(model)
+#-----------------------------------------------
 
+
+#Evaluator startsa here -------------------------
 evaluator = Evaluator()
 predictions = model.predict(
     processed_data["X_test"]
