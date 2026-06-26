@@ -9,7 +9,7 @@ def home():
 
 def load_model():
     global model
-    model = joblib.load("RegressionModel.pkl")
+    model = joblib.load("trained_models/RegressionModel.pkl")
 
 
 @app.route("/predict", methods=[ "POST"])
