@@ -1,8 +1,8 @@
 {
     "dataset": "customer_churn.csv",
     "models": [
-        "LogisticRegression",
-        "DecisionTree",
-        "RandomForest"
-    ]
+    "LogisticRegressionModel",
+    "DecisionTreeModel",
+    "RandomForestClassificationModel"
+]
 }
