@@ -6,7 +6,7 @@ class ExperimentRunner {
 
     }
     async run() {
-     
+     try {
         const promises = [];
         for ( const model of this.config.models) {
                 const payload = {
@@ -31,8 +31,25 @@ class ExperimentRunner {
                         )
                     );
             }
-            const results = await Promise.all(promises);
-            return results;
+            const results = await Promise.allSettled(promises);
+            const successful = results.filter(
+                result => result.status === "fullfilled"
+            );
+
+            const failed = results.filter(
+                result => result.status === "rejected"
+            );
+
+            return {
+                successful, 
+                failed
+            };
+        }
+
+        catch(error) {
+            console.error(error);
+            throw error;
+        }
         }
        
 }
