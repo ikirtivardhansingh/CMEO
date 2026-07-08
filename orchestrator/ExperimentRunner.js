@@ -1,4 +1,5 @@
 import sendRequest from "./httpService.js";
+import eventBus from "./eventBus.js";
 
 class ExperimentRunner {
     constructor(config) {
@@ -7,6 +8,7 @@ class ExperimentRunner {
     }
     async run() {
      try {
+        eventBus.emit("experiment:start");
         const promises = [];
         for ( const model of this.config.models) {
                 const payload = {
@@ -33,13 +35,14 @@ class ExperimentRunner {
             }
             const results = await Promise.allSettled(promises);
             const successful = results.filter(
-                result => result.status === "fullfilled"
+                result => result.status === "fulfilled"
             );
 
             const failed = results.filter(
                 result => result.status === "rejected"
             );
-
+            eventBus.emit("experiment:success");
+            eventBus.emit("experiment:complete");
             return {
                 successful, 
                 failed
@@ -47,6 +50,7 @@ class ExperimentRunner {
         }
 
         catch(error) {
+            eventBus.emit("experiment:error", error);
             console.error(error);
             throw error;
         }
