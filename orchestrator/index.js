@@ -2,6 +2,7 @@ import loadConfig from "./configLoader.js";
 import validateConfig from "./configValidator.js";
 import ExperimentRunner from "./ExperimentRunner.js";
 import eventBus from "./eventBus.js";
+import ResultComparator from "./ResultComparator.js";
 
 
 const config = await loadConfig();
@@ -26,3 +27,7 @@ eventBus.on("experiment:error", (error) => {
 eventBus.on("experiment:complete", () => {
     console.log("Experiment Completed");
 });
+
+const comparator = new ResultComparator();
+const comparison = comparator.compare(results);
+console.log(comparision.bestModel);
