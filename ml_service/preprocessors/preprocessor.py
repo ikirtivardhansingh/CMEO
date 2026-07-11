@@ -3,6 +3,8 @@ from sklearn.model_selection import train_test_split
 import pandas as pd
 
 class Preprocessor:
+    def __init__(self):
+        self.scaler = MinMaxScaler()
 
     def preprocessor(self, df, target_column, drop_columns):
         df = df.drop(columns = drop_columns)
@@ -33,8 +35,8 @@ class Preprocessor:
         df,
         numerical_columns
     ):
-        scaler = MinMaxScaler()
-        df[numerical_columns] = scaler.fit_transform(
+      
+        df[numerical_columns] = self.scaler.fit_transform(
             df[numerical_columns]
         )
        
